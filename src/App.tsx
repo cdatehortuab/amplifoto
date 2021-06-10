@@ -11,10 +11,10 @@ import { GraphQLResult } from '@aws-amplify/api-graphql'
 import { CognitoUser } from 'amazon-cognito-identity-js';
 
 import { listPosts } from './graphql/queries';
-import { Post as PostEntity, ListPostsQuery } from './API';
+import { Post, ListPostsQuery } from './API';
 
 import Posts from './Posts';
-import Post from './Post';
+import SinglePost from './SinglePost';
 import Header from './Header';
 import CreatePost from './CreatePost';
 import Button from './Button';
@@ -23,14 +23,14 @@ function Router() {
   /* create a couple of pieces of initial state */
   const [user, setUser] = useState<CognitoUser | null>(null);
   const [showCreate, setShowCreate] = useState(false);
-  const [posts, setPosts] = useState<PostEntity[]>(() =>[]);
+  const [posts, setPosts] = useState<Post[]>(() =>[]);
 
   const myPosts = useMemo(() => posts.filter((post) => post.owner === user?.getUsername()), [posts, user])
 
   const displayCreate = useCallback(() => setShowCreate(true), []);
   const hideCreate = useCallback(() => setShowCreate(false), []);
 
-  const handleSuccessCreate = useCallback((post?: PostEntity | null) => {
+  const handleSuccessCreate = useCallback((post?: Post | null) => {
     if (post) {
       setPosts((currentPosts) => [...currentPosts, post]);
     }
@@ -52,7 +52,7 @@ function Router() {
     async function fetchPosts() {
       /* query the API, ask for 100 items */
       let postData = await API.graphql({ query: listPosts, variables: { limit: 100 }}) as GraphQLResult<ListPostsQuery>;
-      let postsArray = postData.data?.listPosts?.items?.filter((post) => !!post) as (PostEntity[] | undefined);
+      let postsArray = postData.data?.listPosts?.items?.filter((post) => !!post) as (Post[] | undefined);
 
       if (postsArray) {
         /* update the posts array in the local state */
@@ -74,7 +74,7 @@ function Router() {
               <Posts posts={posts} />
             </Route>
             <Route path="/post/:id" >
-              <Post />
+              <SinglePost />
             </Route>
             <Route exact path="/myposts" >
               <Posts posts={myPosts} />

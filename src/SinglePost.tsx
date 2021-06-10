@@ -5,16 +5,16 @@ import { API } from 'aws-amplify';
 import { GraphQLResult } from '@aws-amplify/api-graphql'
 
 import { getPost } from './graphql/queries';
-import { GetPostQuery, Post as PostEntity } from './API';
+import { GetPostQuery, Post } from './API';
 import PostImage from './PostImage';
 
 interface PostRouteParams {
   id: string,
 }
 
-export default function Post() {
+export default function SinglePost() {
   const [loading, updateLoading] = useState(true);
-  const [post, updatePost] = useState<PostEntity | null>(null);
+  const [post, updatePost] = useState<Post | null>(null);
   const { id } = useParams<PostRouteParams>()
   useEffect(() => {
     async function fetchPost() {
