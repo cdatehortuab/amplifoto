@@ -1,26 +1,46 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { memo, useState, useEffect } from 'react';
+import { API } from 'aws-amplify';
+import { GraphQLResult } from '@aws-amplify/api-graphql'
+
+import { listPosts } from './graphql/queries'
+import { ListPostsQuery } from './API';
+
+interface Post {
+  id: string,
+  name: string,
+  location: string,
+}
 
 function App() {
+  const [posts, setPosts] = useState<Post[]>(() => []);
+
+  useEffect(() => {
+    async function fetchPosts() {
+      try {
+        const result = (await API.graphql({ query: listPosts })) as GraphQLResult<ListPostsQuery>;
+        const items = result.data?.listPosts?.items as Post[];
+        if (items) {
+          setPosts(items);
+        }
+      } catch (error) {
+        console.error('fetchPosts error', error, { error });
+      }
+    }
+
+    fetchPosts();
+  }, []);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Amplifoto</h1>
+      {posts.map((post) => (
+        <div key={post.id}>
+          <h3>{post.name}</h3>
+          <p>{post.location}</p>
+        </div>
+      ))}
     </div>
   );
 }
 
-export default App;
+export default memo(App);
