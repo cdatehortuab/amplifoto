@@ -37,5 +37,13 @@
       "service": "S3",
       "providerPlugin": "awscloudformation"
     }
+  },
+  "predictions": {
+    "imageLabels": {
+      "providerPlugin": "awscloudformation",
+      "service": "Rekognition",
+      "dependsOn": [],
+      "identifyType": "identifyLabels"
+    }
   }
 }
