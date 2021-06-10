@@ -1,6 +1,6 @@
 {
     "identityPoolName": "amplifoto4e3bed1c_identitypool_4e3bed1c",
-    "allowUnauthenticatedIdentities": false,
+    "allowUnauthenticatedIdentities": true,
     "resourceNameTruncated": "amplif4e3bed1c",
     "userPoolName": "amplifoto4e3bed1c_userpool_4e3bed1c",
     "autoVerifiedAttributes": [
