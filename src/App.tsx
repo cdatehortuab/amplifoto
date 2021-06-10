@@ -1,6 +1,7 @@
 import { memo, useState, useEffect } from 'react';
-import { API } from 'aws-amplify';
+import { API, Auth } from 'aws-amplify';
 import { GraphQLResult } from '@aws-amplify/api-graphql'
+import { withAuthenticator } from '@aws-amplify/ui-react'
 
 import { listPosts } from './graphql/queries'
 import { ListPostsQuery } from './API';
@@ -13,6 +14,7 @@ interface Post {
 
 function App() {
   const [posts, setPosts] = useState<Post[]>(() => []);
+  const [currentUser, setCurrentUser] = useState(null);
 
   useEffect(() => {
     async function fetchPosts() {
@@ -27,12 +29,21 @@ function App() {
       }
     }
 
+    async function checkUser() {
+      const user = await Auth.currentAuthenticatedUser();
+      setCurrentUser(user.username);
+      console.log('user: ', user);
+      console.log('user attributes: ', user.attributes);
+    }
+
     fetchPosts();
+    checkUser();
   }, []);
 
   return (
     <div>
       <h1>Amplifoto</h1>
+      Hello, {currentUser}
       {posts.map((post) => (
         <div key={post.id}>
           <h3>{post.name}</h3>
@@ -43,4 +54,4 @@ function App() {
   );
 }
 
-export default memo(App);
+export default withAuthenticator(memo(App));
