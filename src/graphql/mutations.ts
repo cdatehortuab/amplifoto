@@ -13,6 +13,9 @@ export const createPost = /* GraphQL */ `
       location
       description
       image
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
       owner
@@ -30,6 +33,9 @@ export const updatePost = /* GraphQL */ `
       location
       description
       image
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
       owner
@@ -47,6 +53,9 @@ export const deletePost = /* GraphQL */ `
       location
       description
       image
+      _version
+      _deleted
+      _lastChangedAt
       createdAt
       updatedAt
       owner

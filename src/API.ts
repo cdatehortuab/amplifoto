@@ -8,6 +8,7 @@ export type CreatePostInput = {
   location: string,
   description: string,
   image?: string | null,
+  _version?: number | null,
 };
 
 export type ModelPostConditionInput = {
@@ -67,6 +68,9 @@ export type Post = {
   location: string,
   description: string,
   image?: string | null,
+  _version: number,
+  _deleted?: boolean | null,
+  _lastChangedAt: number,
   createdAt: string,
   updatedAt: string,
   owner?: string | null,
@@ -78,10 +82,12 @@ export type UpdatePostInput = {
   location?: string | null,
   description?: string | null,
   image?: string | null,
+  _version?: number | null,
 };
 
 export type DeletePostInput = {
   id: string,
+  _version?: number | null,
 };
 
 export type ModelPostFilterInput = {
@@ -115,6 +121,7 @@ export type ModelPostConnection = {
   __typename: "ModelPostConnection",
   items?:  Array<Post | null > | null,
   nextToken?: string | null,
+  startedAt?: number | null,
 };
 
 export type CreatePostMutationVariables = {
@@ -130,6 +137,9 @@ export type CreatePostMutation = {
     location: string,
     description: string,
     image?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -149,6 +159,9 @@ export type UpdatePostMutation = {
     location: string,
     description: string,
     image?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -168,6 +181,9 @@ export type DeletePostMutation = {
     location: string,
     description: string,
     image?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -186,6 +202,9 @@ export type GetPostQuery = {
     location: string,
     description: string,
     image?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -208,11 +227,44 @@ export type ListPostsQuery = {
       location: string,
       description: string,
       image?: string | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
       owner?: string | null,
     } | null > | null,
     nextToken?: string | null,
+    startedAt?: number | null,
+  } | null,
+};
+
+export type SyncPostsQueryVariables = {
+  filter?: ModelPostFilterInput | null,
+  limit?: number | null,
+  nextToken?: string | null,
+  lastSync?: number | null,
+};
+
+export type SyncPostsQuery = {
+  syncPosts?:  {
+    __typename: "ModelPostConnection",
+    items?:  Array< {
+      __typename: "Post",
+      id: string,
+      name: string,
+      location: string,
+      description: string,
+      image?: string | null,
+      _version: number,
+      _deleted?: boolean | null,
+      _lastChangedAt: number,
+      createdAt: string,
+      updatedAt: string,
+      owner?: string | null,
+    } | null > | null,
+    nextToken?: string | null,
+    startedAt?: number | null,
   } | null,
 };
 
@@ -224,6 +276,9 @@ export type OnCreatePostSubscription = {
     location: string,
     description: string,
     image?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -238,6 +293,9 @@ export type OnUpdatePostSubscription = {
     location: string,
     description: string,
     image?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
@@ -252,6 +310,9 @@ export type OnDeletePostSubscription = {
     location: string,
     description: string,
     image?: string | null,
+    _version: number,
+    _deleted?: boolean | null,
+    _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
     owner?: string | null,
