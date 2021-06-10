@@ -38,6 +38,22 @@ export const schema = {
                     "isRequired": false,
                     "attributes": []
                 },
+                "owner": {
+                    "name": "owner",
+                    "isArray": false,
+                    "type": "String",
+                    "isRequired": false,
+                    "attributes": []
+                },
+                "status": {
+                    "name": "status",
+                    "isArray": false,
+                    "type": {
+                        "enum": "PostStatus"
+                    },
+                    "isRequired": false,
+                    "attributes": []
+                },
                 "createdAt": {
                     "name": "createdAt",
                     "isArray": false,
@@ -96,7 +112,16 @@ export const schema = {
             ]
         }
     },
-    "enums": {},
+    "enums": {
+        "PostStatus": {
+            "name": "PostStatus",
+            "values": [
+                "ACTIVE",
+                "INACTIVE",
+                "SUSPENDED"
+            ]
+        }
+    },
     "nonModels": {},
-    "version": "89246486fb3af8f9dccb7e7da995153e"
+    "version": "f16641bf886d9d76798b1605c77122a9"
 };
