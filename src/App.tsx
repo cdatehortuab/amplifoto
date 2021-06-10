@@ -4,13 +4,7 @@ import { GraphQLResult } from '@aws-amplify/api-graphql'
 import { withAuthenticator } from '@aws-amplify/ui-react'
 
 import { listPosts } from './graphql/queries'
-import { ListPostsQuery } from './API';
-
-interface Post {
-  id: string,
-  name: string,
-  location: string,
-}
+import { Post, ListPostsQuery } from './API';
 
 function App() {
   const [posts, setPosts] = useState<Post[]>(() => []);
