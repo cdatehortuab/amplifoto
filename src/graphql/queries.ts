@@ -10,12 +10,13 @@ export const getPost = /* GraphQL */ `
       location
       description
       image
+      owner
+      status
       _version
       _deleted
       _lastChangedAt
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -32,12 +33,13 @@ export const listPosts = /* GraphQL */ `
         location
         description
         image
+        owner
+        status
         _version
         _deleted
         _lastChangedAt
         createdAt
         updatedAt
-        owner
       }
       nextToken
       startedAt
@@ -63,12 +65,13 @@ export const syncPosts = /* GraphQL */ `
         location
         description
         image
+        owner
+        status
         _version
         _deleted
         _lastChangedAt
         createdAt
         updatedAt
-        owner
       }
       nextToken
       startedAt

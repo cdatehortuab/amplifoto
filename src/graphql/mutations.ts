@@ -13,12 +13,13 @@ export const createPost = /* GraphQL */ `
       location
       description
       image
+      owner
+      status
       _version
       _deleted
       _lastChangedAt
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -33,12 +34,13 @@ export const updatePost = /* GraphQL */ `
       location
       description
       image
+      owner
+      status
       _version
       _deleted
       _lastChangedAt
       createdAt
       updatedAt
-      owner
     }
   }
 `;
@@ -53,12 +55,13 @@ export const deletePost = /* GraphQL */ `
       location
       description
       image
+      owner
+      status
       _version
       _deleted
       _lastChangedAt
       createdAt
       updatedAt
-      owner
     }
   }
 `;

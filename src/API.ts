@@ -8,14 +8,24 @@ export type CreatePostInput = {
   location: string,
   description: string,
   image?: string | null,
+  owner?: string | null,
+  status?: PostStatus | null,
   _version?: number | null,
 };
+
+export enum PostStatus {
+  ACTIVE = "ACTIVE",
+  INACTIVE = "INACTIVE",
+  SUSPENDED = "SUSPENDED",
+}
+
 
 export type ModelPostConditionInput = {
   name?: ModelStringInput | null,
   location?: ModelStringInput | null,
   description?: ModelStringInput | null,
   image?: ModelStringInput | null,
+  status?: ModelPostStatusInput | null,
   and?: Array< ModelPostConditionInput | null > | null,
   or?: Array< ModelPostConditionInput | null > | null,
   not?: ModelPostConditionInput | null,
@@ -61,6 +71,11 @@ export type ModelSizeInput = {
   between?: Array< number | null > | null,
 };
 
+export type ModelPostStatusInput = {
+  eq?: PostStatus | null,
+  ne?: PostStatus | null,
+};
+
 export type Post = {
   __typename: "Post",
   id: string,
@@ -68,12 +83,13 @@ export type Post = {
   location: string,
   description: string,
   image?: string | null,
+  owner?: string | null,
+  status?: PostStatus | null,
   _version: number,
   _deleted?: boolean | null,
   _lastChangedAt: number,
   createdAt: string,
   updatedAt: string,
-  owner?: string | null,
 };
 
 export type UpdatePostInput = {
@@ -82,6 +98,8 @@ export type UpdatePostInput = {
   location?: string | null,
   description?: string | null,
   image?: string | null,
+  owner?: string | null,
+  status?: PostStatus | null,
   _version?: number | null,
 };
 
@@ -96,6 +114,8 @@ export type ModelPostFilterInput = {
   location?: ModelStringInput | null,
   description?: ModelStringInput | null,
   image?: ModelStringInput | null,
+  owner?: ModelStringInput | null,
+  status?: ModelPostStatusInput | null,
   and?: Array< ModelPostFilterInput | null > | null,
   or?: Array< ModelPostFilterInput | null > | null,
   not?: ModelPostFilterInput | null,
@@ -137,12 +157,13 @@ export type CreatePostMutation = {
     location: string,
     description: string,
     image?: string | null,
+    owner?: string | null,
+    status?: PostStatus | null,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
-    owner?: string | null,
   } | null,
 };
 
@@ -159,12 +180,13 @@ export type UpdatePostMutation = {
     location: string,
     description: string,
     image?: string | null,
+    owner?: string | null,
+    status?: PostStatus | null,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
-    owner?: string | null,
   } | null,
 };
 
@@ -181,12 +203,13 @@ export type DeletePostMutation = {
     location: string,
     description: string,
     image?: string | null,
+    owner?: string | null,
+    status?: PostStatus | null,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
-    owner?: string | null,
   } | null,
 };
 
@@ -202,12 +225,13 @@ export type GetPostQuery = {
     location: string,
     description: string,
     image?: string | null,
+    owner?: string | null,
+    status?: PostStatus | null,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
-    owner?: string | null,
   } | null,
 };
 
@@ -227,12 +251,13 @@ export type ListPostsQuery = {
       location: string,
       description: string,
       image?: string | null,
+      owner?: string | null,
+      status?: PostStatus | null,
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
-      owner?: string | null,
     } | null > | null,
     nextToken?: string | null,
     startedAt?: number | null,
@@ -256,12 +281,13 @@ export type SyncPostsQuery = {
       location: string,
       description: string,
       image?: string | null,
+      owner?: string | null,
+      status?: PostStatus | null,
       _version: number,
       _deleted?: boolean | null,
       _lastChangedAt: number,
       createdAt: string,
       updatedAt: string,
-      owner?: string | null,
     } | null > | null,
     nextToken?: string | null,
     startedAt?: number | null,
@@ -276,12 +302,13 @@ export type OnCreatePostSubscription = {
     location: string,
     description: string,
     image?: string | null,
+    owner?: string | null,
+    status?: PostStatus | null,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
-    owner?: string | null,
   } | null,
 };
 
@@ -293,12 +320,13 @@ export type OnUpdatePostSubscription = {
     location: string,
     description: string,
     image?: string | null,
+    owner?: string | null,
+    status?: PostStatus | null,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
-    owner?: string | null,
   } | null,
 };
 
@@ -310,11 +338,12 @@ export type OnDeletePostSubscription = {
     location: string,
     description: string,
     image?: string | null,
+    owner?: string | null,
+    status?: PostStatus | null,
     _version: number,
     _deleted?: boolean | null,
     _lastChangedAt: number,
     createdAt: string,
     updatedAt: string,
-    owner?: string | null,
   } | null,
 };
