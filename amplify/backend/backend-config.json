@@ -16,5 +16,13 @@
         }
       }
     }
+  },
+  "auth": {
+    "amplifoto4e3bed1c": {
+      "service": "Cognito",
+      "providerPlugin": "awscloudformation",
+      "dependsOn": [],
+      "customAuth": false
+    }
   }
 }
