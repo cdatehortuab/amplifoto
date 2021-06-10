@@ -12,6 +12,7 @@ export const onCreatePost = /* GraphQL */ `
       image
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -25,6 +26,7 @@ export const onUpdatePost = /* GraphQL */ `
       image
       createdAt
       updatedAt
+      owner
     }
   }
 `;
@@ -38,6 +40,7 @@ export const onDeletePost = /* GraphQL */ `
       image
       createdAt
       updatedAt
+      owner
     }
   }
 `;
