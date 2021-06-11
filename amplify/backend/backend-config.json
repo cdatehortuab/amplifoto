@@ -45,5 +45,11 @@
       "dependsOn": [],
       "identifyType": "identifyLabels"
     }
+  },
+  "analytics": {
+    "amplifoto": {
+      "service": "Pinpoint",
+      "providerPlugin": "awscloudformation"
+    }
   }
 }
