@@ -6,7 +6,7 @@ import { AmazonAIPredictionsProvider } from '@aws-amplify/predictions';
 import { CognitoUser } from 'amazon-cognito-identity-js';
 
 import Button from './Button';
-import { Post } from './models';
+import { Post, PostStatus } from './models';
 
 Amplify.addPluggable(new AmazonAIPredictionsProvider());
 
@@ -100,7 +100,8 @@ export default function CreatePost({
         location,
         image: image.name,
         id: postId,
-        owner: user?.getUsername()
+        owner: user?.getUsername(),
+        status: PostStatus.ACTIVE,
        };
       console.log("post info is");
       console.log(postInfo)
