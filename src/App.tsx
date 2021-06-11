@@ -45,17 +45,7 @@ function Router() {
 
   /* update user and fetch posts when component loads */
   useEffect(() => {
-    async function updateUserAndFetchPosts() {
-      const user = await Auth.currentAuthenticatedUser();
-      let authType = GRAPHQL_AUTH_MODE.API_KEY;
-      if (user) {
-        authType = GRAPHQL_AUTH_MODE.AMAZON_COGNITO_USER_POOLS;
-        setUser(user);
-      }
-      Amplify.configure({
-        aws_appsync_authenticationType: authType,
-      });
-
+    async function updatePosts() {
       /* query the DataStore */
       let postsArray = await DataStore.query(Post);
 
@@ -64,7 +54,28 @@ function Router() {
       /* update the posts array in the local state */
       setPosts(postsArray);
     }
-    updateUserAndFetchPosts();
+
+    async function updateUserAndPosts() {
+      const user = await Auth.currentAuthenticatedUser();
+      let authType = GRAPHQL_AUTH_MODE.API_KEY;
+      if (user) {
+        authType = GRAPHQL_AUTH_MODE.AMAZON_COGNITO_USER_POOLS;
+        setUser(user);
+      }
+     Amplify.configure({
+        aws_appsync_authenticationType: authType,
+      });
+
+      updatePosts();
+    }
+
+    updateUserAndPosts();
+    const subscription = DataStore.observe(Post).subscribe((msg) => {
+      console.log('Updating posts', { msg });
+      updatePosts();
+    });
+
+    return () => subscription.unsubscribe();
   }, []);
 
   return (
