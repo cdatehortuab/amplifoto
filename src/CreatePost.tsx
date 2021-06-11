@@ -1,7 +1,7 @@
 import { ChangeEventHandler, useState, useCallback } from 'react';
 import { css } from '@emotion/css';
 import { v4 as uuid } from 'uuid';
-import Amplify, { Storage, Predictions, DataStore } from 'aws-amplify';
+import Amplify, { Storage, Predictions, DataStore, Analytics } from 'aws-amplify';
 import { AmazonAIPredictionsProvider } from '@aws-amplify/predictions';
 import { CognitoUser } from 'amazon-cognito-identity-js';
 
@@ -106,6 +106,10 @@ export default function CreatePost({
       console.log("post info is");
       console.log(postInfo)
       const post = await DataStore.save(new Post(postInfo));
+
+      /* send analytics event */
+      Analytics.record({ name: 'postCreated' });
+
       updateFormState(currentState => ({ ...currentState, saving: false }));
       onSuccess(post)
     } catch (err) {
