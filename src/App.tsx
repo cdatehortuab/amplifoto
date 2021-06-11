@@ -5,19 +5,24 @@ import {
   Route
 } from "react-router-dom";
 import { withAuthenticator, AmplifySignOut } from '@aws-amplify/ui-react';
-import { API, Auth } from 'aws-amplify';
+import Amplify, { DataStore, syncExpression, Auth } from 'aws-amplify';
 import { css } from '@emotion/css';
-import { GraphQLResult } from '@aws-amplify/api-graphql'
+import { GRAPHQL_AUTH_MODE } from '@aws-amplify/api-graphql'
 import { CognitoUser } from 'amazon-cognito-identity-js';
 
-import { listPosts } from './graphql/queries';
-import { Post, ListPostsQuery } from './API';
+import { Post, PostStatus } from './models';
 
 import Posts from './Posts';
 import SinglePost from './SinglePost';
 import Header from './Header';
 import CreatePost from './CreatePost';
 import Button from './Button';
+
+DataStore.configure({
+  syncExpressions: [
+    syncExpression(Post, () => (post) => post.status('eq', PostStatus.ACTIVE))
+  ]
+})
 
 function Router() {
   /* create a couple of pieces of initial state */
@@ -38,28 +43,28 @@ function Router() {
   }, [hideCreate]);
 
 
-  /* update user when component loads */
+  /* update user and fetch posts when component loads */
   useEffect(() => {
-    async function updateUser() {
-      setUser(await Auth.currentAuthenticatedUser());
-    }
-
-    updateUser();
-  }, []);
-
-  /* fetch posts when component loads */
-  useEffect(() => {
-    async function fetchPosts() {
-      /* query the API, ask for 100 items */
-      let postData = await API.graphql({ query: listPosts, variables: { limit: 100 }}) as GraphQLResult<ListPostsQuery>;
-      let postsArray = postData.data?.listPosts?.items?.filter((post) => !!post) as (Post[] | undefined);
-
-      if (postsArray) {
-        /* update the posts array in the local state */
-        setPosts(postsArray);
+    async function updateUserAndFetchPosts() {
+      const user = await Auth.currentAuthenticatedUser();
+      let authType = GRAPHQL_AUTH_MODE.API_KEY;
+      if (user) {
+        authType = GRAPHQL_AUTH_MODE.AMAZON_COGNITO_USER_POOLS;
+        setUser(user);
       }
+      Amplify.configure({
+        aws_appsync_authenticationType: authType,
+      });
+
+      /* query the DataStore */
+      let postsArray = await DataStore.query(Post);
+
+      console.log('POST DATA FROM LOCAL: ');
+      console.log(postsArray);
+      /* update the posts array in the local state */
+      setPosts(postsArray);
     }
-    fetchPosts();
+    updateUserAndFetchPosts();
   }, []);
 
   return (
@@ -87,6 +92,7 @@ function Router() {
         <CreatePost
           onSuccess={handleSuccessCreate}
           onCancel={hideCreate}
+          user={user}
         />
       )}
     </>

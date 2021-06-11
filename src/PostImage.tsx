@@ -2,10 +2,11 @@ import { memo, useEffect, useState } from "react"
 import { Storage } from 'aws-amplify';
 import { CustomPlaceholder } from 'react-placeholder-image';
 
-import { Post } from "./API";
-
 interface IPostImageProps {
-  post: Post,
+  post: {
+    name: string,
+    image?: string | null,
+  },
   className?: string,
 }
 

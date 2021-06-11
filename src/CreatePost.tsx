@@ -1,13 +1,12 @@
 import { ChangeEventHandler, useState, useCallback } from 'react';
 import { css } from '@emotion/css';
 import { v4 as uuid } from 'uuid';
-import Amplify, { Storage, API, Predictions } from 'aws-amplify';
+import Amplify, { Storage, Predictions, DataStore } from 'aws-amplify';
 import { AmazonAIPredictionsProvider } from '@aws-amplify/predictions';
-import { GRAPHQL_AUTH_MODE, GraphQLResult } from '@aws-amplify/api-graphql'
+import { CognitoUser } from 'amazon-cognito-identity-js';
 
 import Button from './Button';
-import { createPost } from './graphql/mutations';
-import { Post, CreatePostMutation } from './API';
+import { Post } from './models';
 
 Amplify.addPluggable(new AmazonAIPredictionsProvider());
 
@@ -38,10 +37,11 @@ interface IFormState {
 interface ICreatePostProps {
   onSuccess: (post?: Post | null) => void,
   onCancel: () => void,
+  user?: CognitoUser | null,
 }
 
 export default function CreatePost({
-  onSuccess, onCancel
+  onSuccess, onCancel, user = null,
 }: ICreatePostProps) {
   /* 1. Create local state with useState hook */
   const [formState, updateFormState] = useState<IFormState>(initialState)
@@ -94,21 +94,23 @@ export default function CreatePost({
       /* --- end PREDICTIONS --- */
       const postId = uuid();
       const postDescription = description + predictedLabel;
-      const postInfo = { name, description: postDescription, location, image: formState.image.name, id: postId };
+      const postInfo = {
+        name,
+        description: postDescription,
+        location,
+        image: image.name,
+        id: postId,
+        owner: user?.getUsername()
+       };
       console.log("post info is");
       console.log(postInfo)
-      const result = await API.graphql({
-        query: createPost,
-        variables: { input: postInfo },
-        authMode: GRAPHQL_AUTH_MODE.AMAZON_COGNITO_USER_POOLS
-      }) as GraphQLResult<CreatePostMutation>;
-      const post = result.data?.createPost;
+      const post = await DataStore.save(new Post(postInfo));
       updateFormState(currentState => ({ ...currentState, saving: false }));
       onSuccess(post)
     } catch (err) {
       console.log('error: ', err);
     }
-  }, [formState, onSuccess]);
+  }, [formState, onSuccess, user]);
 
   return (
     <div className={containerStyle}>

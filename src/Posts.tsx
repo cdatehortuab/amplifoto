@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { css } from '@emotion/css';
 import { Link } from 'react-router-dom';
 
-import { Post } from './API';
+import { Post } from './models';
 import PostImage from './PostImage';
 
 interface IPostsProps {
