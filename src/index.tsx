@@ -8,7 +8,7 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 import config from './aws-exports'
 
-Amplify.configure(config)
+Amplify.configure({ ...config, aws_appsync_authenticationType: undefined })
 
 ReactDOM.render(
   <React.StrictMode>
